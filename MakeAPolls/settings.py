@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'Accounts.apps.AccountsConfig',
+    'Polls.apps.PollsConfig',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +98,9 @@ DATABASES = {
         }  
     }
 }
+
+# custom user model
+AUTH_USER_MODEL = 'Accounts.User'
 
 
 # Password validation
