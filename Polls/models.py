@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.template.defaultfilters import slugify
-from  datetime import date
+import datetime
 
 
 class SoftDeleteManager(models.Manager):
@@ -34,18 +34,25 @@ class Question(SoftDeleteModel, models.Model):
     description = models.CharField(max_length=50, null=True, blank=True)
     thumbnail   = models.ImageField(upload_to='/uploads/%Y/%m/%d/', null=True, blank=True)
     question    = models.CharField(max_length=255)
-    pub_date    = models.DateTimeField(verbose_name='Date published', default=date.today)
+    pub_date    = models.DateTimeField(verbose_name='Date published', default=datetime.date.today)
     updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now)
-
+    # Add status for poll draft, published
 
     def __str__(self):
         return self.title
     
-
     # Override save method to automatically create slugs
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
     
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    
+
 # Create choice model
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    text     = models.CharField(max_length=255) 
