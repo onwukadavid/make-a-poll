@@ -36,7 +36,7 @@ class Question(SoftDeleteModel, models.Model):
     question    = models.CharField(max_length=255)
     pub_date    = models.DateTimeField(verbose_name='Date published', default=datetime.date.today)
     updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now)
-    # Add status for poll draft, published
+    status      = models.CharField(max_length=11, default='published')
 
     def __str__(self):
         return self.title
@@ -46,6 +46,12 @@ class Question(SoftDeleteModel, models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+
+    def save_as_draft(self):
+        self.pub_date = None
+        self.updated_at = None
+        self.status = 'draft'
+        self.save()
     
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
