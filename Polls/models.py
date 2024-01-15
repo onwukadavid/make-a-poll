@@ -32,7 +32,7 @@ class Question(SoftDeleteModel, models.Model):
     title       = models.CharField(max_length=50)
     slug        = models.SlugField(max_length=50)
     description = models.CharField(max_length=50, null=True, blank=True)
-    thumbnail   = models.ImageField(upload_to='/uploads/%Y/%m/%d/', null=True, blank=True)
+    thumbnail   = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
     question    = models.CharField(max_length=255)
     pub_date    = models.DateTimeField(verbose_name='Date published', default=datetime.date.today)
     updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now)
@@ -55,10 +55,16 @@ class Question(SoftDeleteModel, models.Model):
     
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+    
+    class Meta:
+        db_table = 'Questions'
 
     
 
 # Create choice model
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text     = models.CharField(max_length=255) 
+    text     = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'Choices'
