@@ -32,11 +32,11 @@ class Question(SoftDeleteModel, models.Model):
     title       = models.CharField(max_length=50)
     slug        = models.SlugField(max_length=50)
     description = models.CharField(max_length=50, null=True, blank=True)
-    thumbnail   = models.ImageField(upload_to='/uploads/%Y/%m/%d/', null=True, blank=True)
+    thumbnail   = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
     question    = models.CharField(max_length=255)
-    pub_date    = models.DateTimeField(verbose_name='Date published', default=datetime.date.today)
-    updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now)
-    # Add status for poll draft, published
+    pub_date    = models.DateTimeField(verbose_name='Date published', default=timezone.now())
+    updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now())
+    status      = models.CharField(max_length=11, default='published')
 
     def __str__(self):
         return self.title
@@ -46,13 +46,25 @@ class Question(SoftDeleteModel, models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+
+    def save_as_draft(self):
+        self.pub_date = None
+        self.updated_at = None
+        self.status = 'draft'
+        self.save()
     
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+    
+    class Meta:
+        db_table = 'Questions'
 
     
 
 # Create choice model
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text     = models.CharField(max_length=255) 
+    text     = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'Choices'
