@@ -34,8 +34,8 @@ class Question(SoftDeleteModel, models.Model):
     description = models.CharField(max_length=50, null=True, blank=True)
     thumbnail   = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
     question    = models.CharField(max_length=255)
-    pub_date    = models.DateTimeField(verbose_name='Date published', default=datetime.date.today)
-    updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now)
+    pub_date    = models.DateTimeField(verbose_name='Date published', default=timezone.now())
+    updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now())
     status      = models.CharField(max_length=11, default='published')
 
     def __str__(self):
