@@ -28,6 +28,6 @@ class TestQuestionModel(TestCase):
         self.assertEqual(self.user.username, self.question.user.username)
         self.assertNotEqual(user2.username, self.question.user.username)
         
-    def test_question_contains_multiple_questions(self):
+    def test_question_contains_multiple_choices(self):
         ...
 
