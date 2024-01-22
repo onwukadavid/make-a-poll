@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Polls/css/poll.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <p>{{poll.question}}</p>
+
+    <ul>
+        {% for choice in poll.choice_set.all %}
+            <li>{{ choice.text }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('polls/', include('Polls.urls')),
     path('account/', include('Accounts.urls'))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+if settings.DEBUG == True:
+   urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
