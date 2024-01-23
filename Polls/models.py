@@ -4,6 +4,11 @@ from django.utils import timezone
 from django.template.defaultfilters import slugify
 import datetime
 
+STATUS = [
+    ('draft', 'DRAFT'),
+    ('published', 'PUBLISHED')
+]
+
 
 class SoftDeleteManager(models.Manager):
     def with_deleted(self):
@@ -36,7 +41,7 @@ class Question(SoftDeleteModel, models.Model):
     question    = models.CharField(max_length=255)
     pub_date    = models.DateTimeField(verbose_name='Date published', default=timezone.now) # remove default and set auto_now_add=True
     updated_at  = models.DateTimeField(verbose_name='Last update', default=timezone.now) # remove default and set auto_now=True
-    status      = models.CharField(max_length=11, default='published')
+    status      = models.CharField(max_length=9, default='published', choices=STATUS)
 
     def __str__(self):
         return self.title
@@ -63,7 +68,7 @@ class Question(SoftDeleteModel, models.Model):
 
 # Create choice model
 class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')
     text     = models.CharField(max_length=255)
     votes    = models.IntegerField(default=0)
 

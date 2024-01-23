@@ -1,11 +1,13 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from Polls.models import Question
 
 
 class TestAllPostView(TestCase):
     
     def setUp(self):
         self.client = Client()
+        question = Question(title='First poll', status='published')
 
     # test home view returns 200
     def test_home_view_is_(self):
@@ -18,6 +20,7 @@ class TestAllPostView(TestCase):
     # def test_home_view_poll_contains_title_description_status_owner(self):
     #     url = reverse('polls:all-polls')
     #     response = self.client.get(url)
+    #     self.assertContains(response.content, 'First poll')
     #     print(response)
 
     # test home view contains different polls by different users

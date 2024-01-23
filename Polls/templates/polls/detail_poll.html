@@ -12,7 +12,7 @@
     <p>{{poll.question}}</p>
 
     <ul>
-        {% for choice in poll.choice_set.all %}
+        {% for choice in poll.choices.all %}
             <li>{{ choice.text }}</li>
         {% endfor %}
     </ul>

@@ -12,7 +12,7 @@ def view_poll(request, username, slug):
     return render(request, 'Polls/detail_poll.html', context)
 
 def all_polls(request):
-    polls = Question.objects.all()[::-1]
+    polls = Question.objects.all().filter(status='published')[::1]
     context = {'polls':polls}
     return render(request, 'Polls/home.html', context)
 
