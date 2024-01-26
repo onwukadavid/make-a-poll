@@ -18,3 +18,5 @@ class TestChoiceModel(TestCase):
     # test field labels
         
     # test soft delete feature
+        
+    # test other custom methods
