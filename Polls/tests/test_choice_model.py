@@ -12,3 +12,11 @@ class TestChoiceModel(TestCase):
 
     def test_choice_belongs_to_a_question(self):
         self.assertEqual(self.question.title, self.choice1.question.title)
+
+    # test str method
+        
+    # test field labels
+        
+    # test soft delete feature
+        
+    # test other custom methods

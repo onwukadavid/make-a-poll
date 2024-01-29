@@ -31,3 +31,8 @@ class TestQuestionModel(TestCase):
     def test_question_contains_multiple_choices(self):
         ...
 
+    # test str method
+        
+    # test field labels
+        
+    # test soft delete feature
