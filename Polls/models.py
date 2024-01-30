@@ -35,7 +35,7 @@ class SoftDeleteModel(models.Model):
 class Question(SoftDeleteModel, models.Model):
     user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title       = models.CharField(max_length=50)
-    slug        = models.SlugField(max_length=50)
+    slug        = models.SlugField(max_length=50) # editable=False also fix admin issue with slugs
     description = models.CharField(max_length=50, null=True, blank=True)
     thumbnail   = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
     question    = models.CharField(max_length=255)

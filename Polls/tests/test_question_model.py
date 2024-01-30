@@ -1,6 +1,7 @@
 from django.test import TestCase
 from Polls.models import Question, Choice
 from Accounts.models import User
+from django.template.defaultfilters import slugify
 # import unittest
 
 
@@ -17,8 +18,20 @@ class TestQuestionModel(TestCase):
         question = Question(title='Test poll', description='This is a test poll', question='Is it working', status='draft')
         self.assertEqual('draft', question.status)
 
+    #NOT WORKING
     # def test_slug_is_properly_created(self):
-    #     self.assertEqual('test-poll', self.question.slug)
+    #     title = 'My question'
+    #     self.user1 = User.objects.create(username='TestUser', email = 'test@gmail.com')
+    #     self.question1 = Question.objects.create(
+    #         title=title,
+    #         slug=slugify(title),
+    #         description='test description',
+    #         question='Is this working',
+    #         user=self.user1
+    #         )
+    #     # self.question1.save()
+
+    #     self.assertEqual('my-question', self.question.slug)
 
     def test_question_object_returns_title(self):
         self.assertEqual('Test poll', str(self.question))
@@ -32,7 +45,9 @@ class TestQuestionModel(TestCase):
         ...
 
     # test str method
+    def test_question_object_returns_question_name(self):
+        self.assertEqual('Test poll', str(self.question))
         
     # test field labels
-        
+    
     # test soft delete feature

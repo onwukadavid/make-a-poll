@@ -16,6 +16,7 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
 
     inlines = [ChoiceInline]
+    readonly_fields = ['slug']
     list_display = ('title', 'description', 'status', 'user', 'deleted_at')
     list_filter = ['status', 'user', 'deleted_at']
     search_fields = ['title', 'description']
