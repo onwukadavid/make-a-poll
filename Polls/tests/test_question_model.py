@@ -34,5 +34,38 @@ class TestQuestionModel(TestCase):
     # test str method
         
     # test field labels
+    def test_field_label_for_question_model(self):
+        title_label =self.question._meta.get_field('title').verbose_name
+        slug_label =self.question._meta.get_field('slug').verbose_name
+        description_label =self.question._meta.get_field('description').verbose_name
+        thumbnail_label =self.question._meta.get_field('thumbnail').verbose_name
+        question_label =self.question._meta.get_field('question').verbose_name
+        pub_date_label =self.question._meta.get_field('pub_date').verbose_name
+        updated_at_label =self.question._meta.get_field('updated_at').verbose_name
+        status_label =self.question._meta.get_field('status').verbose_name
+
+        self.assertEqual('title', title_label)
+        self.assertEqual('slug', slug_label)
+        self.assertEqual('description', description_label)
+        self.assertEqual('thumbnail', thumbnail_label)
+        self.assertEqual('question', question_label)
+        self.assertEqual('Date published', pub_date_label)
+        self.assertEqual('Last update', updated_at_label)
+        self.assertEqual('status', status_label)
+
+    def test_field_max_length_for_question_model(self):
+        title_max_length = self.question._meta.get_field('title').max_length
+        slug_max_length = self.question._meta.get_field('slug').max_length
+        description_max_length = self.question._meta.get_field('description').max_length
+        question_max_length = self.question._meta.get_field('question').max_length
+        status_max_length = self.question._meta.get_field('status').max_length
+
+        self.assertEqual(50, title_max_length)
+        self.assertEqual(50, slug_max_length)
+        self.assertEqual(50, description_max_length)
+        self.assertEqual(255, question_max_length)
+        self.assertEqual(9, status_max_length)
+
+    # test question contains choices
         
     # test soft delete feature
