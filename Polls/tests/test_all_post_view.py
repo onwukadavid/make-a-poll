@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from django.urls import reverse
+from django.urls import reverse, resolve
 from Polls.models import Question
 from Accounts.models import User
 
@@ -86,8 +86,6 @@ class TestAllPostView(TestCase):
         # test length of polls returned
             
     # test home view resolves home url
-    def test_home_view_resolves_home_url(self):
-        ...
-
-        
-    
+    def test_home_url_resolves_home_url_name(self):
+        view = resolve('/polls/')
+        self.assertEqual('all-polls', view.url_name) 
