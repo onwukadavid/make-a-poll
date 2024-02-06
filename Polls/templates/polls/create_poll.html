@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{% url 'polls:create-poll' %}" method="POST" novalidate>
+        {% csrf_token %}
+
+        {%if error %}
+            {{error}}
+        {% endif %}
+        <div>
+            {{ poll_form.title.label }}:
+            {{ poll_form.title }}
+            {{ poll_form.title.errors }}
+        </div>
+        <div>
+            {{ poll_form.description.label }}:
+            {{ poll_form.description }}
+            {{ poll_form.description.errors }}
+        </div>
+        <div>
+            {{ poll_form.question.label }}:
+            {{ poll_form.question }}
+            {{ poll_form.question.errors }}
+        </div>
+        <div>
+            {{ poll_form.thumbnail.label }}:
+            {{ poll_form.thumbnail }}
+            {{ poll_form.thumbnail.errors }}
+        </div>
+        <div>
+            {{ poll_form.status.label }}:
+            {{ poll_form.status }}
+            {{ poll_form.status.errors }}
+        </div>
+        
+
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>
