@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from Polls.models import Question
 from django.shortcuts import get_object_or_404
 from Polls.forms import QuestionForm
@@ -17,6 +18,7 @@ def create_poll(request):
                 question = poll_form.cleaned_data.get('question'),
                 status = poll_form.cleaned_data.get('status'),
             )
+            return redirect(reverse('polls:all-polls'))
         else:
             context['error'] = "Form contains errors"
     else:
