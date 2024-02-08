@@ -1,16 +1,19 @@
+from django.forms import formset_factory
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from Polls.models import Question
+from Polls.models import Choice, Question
 from django.shortcuts import get_object_or_404
-from Polls.forms import QuestionForm
+from Polls.forms import ChoiceForm, QuestionForm
 
 def create_poll(request):
     context = {}
 
+    ChoiceFormset = formset_factory(ChoiceForm, extra=3)
     if request.method == 'POST':
+        formset = ChoiceFormset(request.POST)
         poll_form = QuestionForm(request.POST, request.FILES)
         if poll_form.is_valid():
-            Question.objects.create(
+            question = Question(
                 user = request.user,
                 title = poll_form.cleaned_data.get('title'),
                 description = poll_form.cleaned_data.get('description'),
@@ -18,7 +21,15 @@ def create_poll(request):
                 question = poll_form.cleaned_data.get('question'),
                 status = poll_form.cleaned_data.get('status'),
             )
-            return redirect(reverse('polls:all-polls'))
+            question.save()
+            # pass
+            if formset.is_valid():
+                for i in range(len(formset)):
+                    Choice.objects.create(
+                        question=question,
+                        text = formset.cleaned_data[i].get('text')
+                    )
+                return redirect(reverse('polls:all-polls'))
         else:
             context['error'] = "Form contains errors"
     else:
