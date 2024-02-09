@@ -9,12 +9,20 @@
     <title>Document</title>
 </head>
 <body>
-    <p>{{poll.question}}</p>
+    <!-- <p>{{poll.question}}</p> -->
 
-    <ul>
-        {% for choice in poll.choices.all %}
-            <li>{{ choice.text }}</li>
-        {% endfor %}
-    </ul>
+    <form action="{% url 'polls:vote' poll.user.username poll.slug %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>{{poll.question}}</h1></legend>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in poll.choices.all %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.text }}</label><br>
+            {% endfor %}
+        </fieldset>
+        
+        <button type="submit">Vote</button>
+    </form>
 </body>
 </html>
