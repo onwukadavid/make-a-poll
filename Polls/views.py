@@ -8,12 +8,12 @@ from Polls.forms import ChoiceForm, QuestionForm
 
 def create_poll(request):
     context = {}
-
     ChoiceFormset = formset_factory(ChoiceForm, extra=3)
+
     if request.method == 'POST':
         formset = ChoiceFormset(request.POST)
         poll_form = QuestionForm(request.POST, request.FILES)
-        if poll_form.is_valid():
+        if poll_form.is_valid() and formset.is_valid():
             question = Question(
                 user = request.user,
                 title = poll_form.cleaned_data.get('title'),
@@ -24,20 +24,23 @@ def create_poll(request):
             )
             question.save()
             # pass
-            if formset.is_valid():
-                for i in range(len(formset)):
-                    Choice.objects.create(
-                        question=question,
-                        text = formset.cleaned_data[i].get('text')
-                    )
-                return HttpResponseRedirect(reverse('polls:all-polls'))#work on this
+            # if formset.is_valid():
+            for i in range(len(formset)):
+                Choice.objects.create(
+                    question=question,
+                    text = formset.cleaned_data[i].get('text')
+                )
+            return HttpResponseRedirect(reverse('polls:all-polls'))#work on this
         else:
+            print(formset.errors) # checkout formset errors
             context['error'] = "Form contains errors"
     else:
         poll_form = QuestionForm()
         formset = ChoiceFormset()
     
-    context = {'poll_form':poll_form, 'formset':formset}
+    # context = {'poll_form':poll_form, 'formset':formset}
+    context['poll_form'] = poll_form
+    context['formset'] = formset
 
     return render(request, 'Polls/create_poll.html', context)
 

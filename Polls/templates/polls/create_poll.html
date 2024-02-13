@@ -46,6 +46,11 @@
         {% endfor %} -->
         <div>
             {{ formset }}
+            {% if formset.errors %}
+                {% for error in formset.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
         </div>
         
 
