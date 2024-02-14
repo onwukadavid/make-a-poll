@@ -62,7 +62,6 @@ class TestViewPoll(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.context['poll'], self.question1)
 
-
     def test_view_displays_its_choice(self):
         url = reverse('polls:view-poll', kwargs={'username':self.user1.username, 'slug':self.question1.slug})
         response = self.client.get(url)

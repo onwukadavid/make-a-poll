@@ -24,7 +24,6 @@ def create_poll(request):
             )
             question.save()
             # pass
-            # if formset.is_valid():
             for i in range(len(formset)):
                 Choice.objects.create(
                     question=question,
@@ -32,7 +31,6 @@ def create_poll(request):
                 )
             return HttpResponseRedirect(reverse('polls:all-polls'))#work on this
         else:
-            print(formset.errors) # checkout formset errors
             context['error'] = "Form contains errors"
     else:
         poll_form = QuestionForm()

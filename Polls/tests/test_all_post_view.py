@@ -21,7 +21,7 @@ class TestAllPostView(TestCase):
 
 
     # test home view returns 200
-    def test_home_view_is_(self):
+    def test_home_view_returns_200(self):
         response = self.client.get(self.url)
         self.assertEqual(200, response.status_code)
 
