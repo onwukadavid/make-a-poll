@@ -28,7 +28,7 @@ class TestQuestionForm(SimpleTestCase):
         question_form = QuestionForm(data=data)
         self.assertFalse(question_form.is_valid())
 
-    def test_title_field_max_length(self):
+    def test_form_returns_false_if_title_field_max_length_is_exceeded(self):
         title=''
         for _ in range(51):
             title+='a'
@@ -41,7 +41,7 @@ class TestQuestionForm(SimpleTestCase):
         question_form = QuestionForm(data=data)
         self.assertFalse(question_form.is_valid())
 
-    def test_question_field_max_length(self):
+    def test_form_returns_false_if_question_field_max_length_is_exceeded(self):
         question=''
         for _ in range(256):
             question+='a'

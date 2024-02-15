@@ -4,14 +4,14 @@ from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse
 from Polls.models import Choice, Question
 from django.shortcuts import get_object_or_404
-from Polls.forms import ChoiceForm, QuestionForm
+from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet
 
 def create_poll(request):
     context = {}
-    ChoiceFormset = formset_factory(ChoiceForm, extra=3)
+    # ChoiceFormset = formset_factory(ChoiceForm, extra=3)
 
     if request.method == 'POST':
-        formset = ChoiceFormset(request.POST)
+        formset = ChoiceFormFormSet.ChoiceFormset(request.POST)
         poll_form = QuestionForm(request.POST, request.FILES)
         if poll_form.is_valid() and formset.is_valid():
             question = Question(
@@ -34,7 +34,7 @@ def create_poll(request):
             context['error'] = "Form contains errors"
     else:
         poll_form = QuestionForm()
-        formset = ChoiceFormset()
+        formset = ChoiceFormFormSet.ChoiceFormset()
     
     # context = {'poll_form':poll_form, 'formset':formset}
     context['poll_form'] = poll_form

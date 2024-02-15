@@ -2,7 +2,7 @@ from django.forms import formset_factory
 from django.test import TestCase
 from django.urls import reverse
 from Accounts.models import User
-from Polls.forms import QuestionForm, ChoiceForm
+from Polls.forms import QuestionForm, ChoiceFormFormSet
 
 
 class TestCreatePollView(TestCase):
@@ -61,6 +61,9 @@ class TestCreatePollView(TestCase):
         self.assertTrue('error' in response.context)
 
     def test_create_poll_view_uses_the_right_form(self):
-        ChoiceFormset = formset_factory(ChoiceForm, extra=3)
         self.assertIsInstance(self.response.context.get('poll_form'), QuestionForm)
-        # self.assertIsInstance(self.response.context.get('formset'), ChoiceFormset) fix this
+        self.assertIsInstance(self.response.context.get('formset'), ChoiceFormFormSet.ChoiceFormset)
+
+    def test_choice_for_formset_returns_3_forms(self):
+        num_of_forms_in_formset = len(self.response.context.get('formset').forms)
+        self.assertEqual(num_of_forms_in_formset, 3)
