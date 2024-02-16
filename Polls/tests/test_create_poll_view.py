@@ -9,29 +9,23 @@ class TestCreatePollView(TestCase):
     def setUp(self):
         self.url = reverse('polls:create-poll')
         self.response = self.client.get(self.url)
-        # self.user1 = User.objects.create(username='TestUser', email = 'test@gmail.com')
-        # self.data = {
-        #     'title':'My question',
-        #     'description':'test description',
-        #     'question':'Is this working',
-        #     'user':self.user1,
-        #     'status':'published',
-        #     # 'thumbnail':None
-        #     'choices-TOTAL_FORMS': 3,
-        #     'choices-INITIAL_FORMS': 0,
-        #     'choices-MIN_NUM_FORMS': 0,
-        #     'choices-MAX_NUM_FORMS': 1000,
-        #     'choices-0-text': 'yes',
-        #     'choices-1-text': 'no',
-        #     'choices-2-text': 'maybe',
-        #     # 'choices-0-votes': 0,
-        #     # 'choices-1-votes': 0,
-        #     # 'choices-2-votes': 0,
-        #     # 'choices-0-id': '',
-        #     # 'choices-1-id': '',
-        #     # 'choices-2-id': '',
-        #     # 'choices-0-question': '',
-        # }
+        self.user1 = User.objects.create(username='TestUser', email = 'test@gmail.com', password='password')
+        self.data = {
+            'title':'My question',
+            'description':'test description',
+            'question':'Is this working',
+            'user':self.user1,
+            'status':'published',
+            # 'thumbnail':None
+            'form-TOTAL_FORMS': 3,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+            'form-0-text': 'yes',
+            'form-1-text': 'no',
+            'form-2-text': 'maybe',
+        }
+        # {'title': ["KDF;MD'LFD"], 'description': ['J;ZFMDA;F'], 'question': ['DPDFM;DLFS'], 'thumbnail': [''], 'status': ['published'], 'form-TOTAL_FORMS': ['3'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['0'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-text': ['ldxfmdf'], 'form-1-text': ['alf.e,rf'], 'form-2-text': ['lskd;kfz/m/df']}
     
     def test_create_view_returns_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -43,8 +37,9 @@ class TestCreatePollView(TestCase):
         self.assertTrue('poll_form' in self.response.context)
         self.assertTrue('formset' in self.response.context)
 
-    # # Fix this test
+    # will test when i create login endpoint
     # def test_create_poll_view_redierct_to_homepage_when_form_is_valid(self):
+    #     login = self.client.login(username='TestUser', password='password')
     #     response = self.client.post(path=self.url, data=self.data)
     #     print(response.content)
 
@@ -67,3 +62,21 @@ class TestCreatePollView(TestCase):
     def test_choice_for_formset_returns_3_forms(self):
         num_of_forms_in_formset = len(self.response.context.get('formset').forms)
         self.assertEqual(num_of_forms_in_formset, 3)
+
+    def test_create_poll_view_displays_error_if_empty_formset_data_was_sent(self):
+        data = {
+        'title':'My question',
+        'description':'test description',
+        'question':'Is this working',
+        'user':self.user1,
+        'status':'published',
+        'form-TOTAL_FORMS': 3,
+        'form-INITIAL_FORMS': 0,
+        'form-MIN_NUM_FORMS': 0,
+        'form-MAX_NUM_FORMS': 1000,
+        'form-0-text': '',
+        'form-1-text': '',
+        'form-2-text': '',
+        }
+        response = self.client.post(path=self.url, data=data)
+        self.assertTrue('Please provide a text for all choice fields.' in str(response.content))

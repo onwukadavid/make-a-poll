@@ -13,6 +13,7 @@
         {%if error %}
             {{error}}
         {% endif %}
+        {{ formset.non_form_errors }}
         <div>
             {{ poll_form.title.label }}:
             {{ poll_form.title }}
@@ -46,11 +47,11 @@
         {% endfor %} -->
         <div>
             {{ formset }}
-            {% if formset.errors %}
+            <!-- {% if formset.errors %}
                 {% for error in formset.errors %}
                     {{ error }}
                 {% endfor %}
-            {% endif %}
+            {% endif %} -->
         </div>
         
 
