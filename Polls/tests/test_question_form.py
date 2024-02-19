@@ -1,8 +1,8 @@
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 from Polls.forms import QuestionForm
 
 
-class TestQuestionForm(SimpleTestCase):
+class TestQuestionForm(TestCase):
     def test_question_form_labels(self):
         question_form = QuestionForm()
 

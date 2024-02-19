@@ -25,7 +25,6 @@ class TestCreatePollView(TestCase):
             'form-1-text': 'no',
             'form-2-text': 'maybe',
         }
-        # {'title': ["KDF;MD'LFD"], 'description': ['J;ZFMDA;F'], 'question': ['DPDFM;DLFS'], 'thumbnail': [''], 'status': ['published'], 'form-TOTAL_FORMS': ['3'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['0'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-text': ['ldxfmdf'], 'form-1-text': ['alf.e,rf'], 'form-2-text': ['lskd;kfz/m/df']}
     
     def test_create_view_returns_200(self):
         self.assertEqual(self.response.status_code, 200)
@@ -79,4 +78,14 @@ class TestCreatePollView(TestCase):
         'form-2-text': '',
         }
         response = self.client.post(path=self.url, data=data)
-        self.assertTrue('Please provide a text for all choice fields.' in str(response.content))
+        self.assertTrue('Please provide a text for this choice.' in str(response.content))
+
+# Can only test endpoint when i create login endpoint
+    # def test_question_cannot_be_created_if_title_already_exists(self):
+    #     login = self.client.login(username=self.user1.username, password=self.user1.password)
+        
+    #     response1 = self.client.post(path=self.url, data=self.data)
+    #     print(response1.status_code)
+    #     response2 = self.client.post(path=self.url, data=self.data)
+    #     print(response2.status_code)
+    #     self.assertTrue('Title already exists.' in str(response2.content))

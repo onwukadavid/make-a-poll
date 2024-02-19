@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ValidationError, formset_factory
 from django.forms import BaseFormSet
+from Polls.models import Question
 
 
 STATUS = {
@@ -38,3 +39,10 @@ class QuestionForm(forms.Form):
     thumbnail = forms.ImageField(required=False)
     question = forms.CharField(max_length=255)
     status = forms.ChoiceField(choices=STATUS, widget=forms.Select)
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        get_title = Question.objects.filter(title=title)
+        if get_title.exists():
+            raise ValidationError('Title already exists.')
+        return title

@@ -18,20 +18,18 @@ class TestQuestionModel(TestCase):
         question = Question(title='Test poll', description='This is a test poll', question='Is it working', status='draft')
         self.assertEqual('draft', question.status)
 
-    #NOT WORKING
-    # def test_slug_is_properly_created(self):
-    #     title = 'My question'
-    #     self.user1 = User.objects.create(username='TestUser', email = 'test@gmail.com')
-    #     self.question1 = Question.objects.create(
-    #         title=title,
-    #         slug=slugify(title),
-    #         description='test description',
-    #         question='Is this working',
-    #         user=self.user1
-    #         )
-    #     # self.question1.save()
+    def test_slug_is_properly_created(self):
+        title = 'My question'
+        self.user1 = User.objects.create(username='TestUser', email = 'test@gmail.com')
+        self.question1 = Question.objects.create(
+            title=title,
+            slug=slugify(title),
+            description='test description',
+            question='Is this working',
+            user=self.user1
+            )
 
-    #     self.assertEqual('my-question', self.question.slug)
+        self.assertEqual('my-question', self.question1.slug)
 
     def test_question_object_returns_title(self):
         self.assertEqual('Test poll', str(self.question))
