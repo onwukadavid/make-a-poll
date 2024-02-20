@@ -8,8 +8,7 @@ from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet
 
 def create_poll(request):
     context = {}
-    # ChoiceFormset = formset_factory(ChoiceForm, extra=3)
-
+    
     if request.method == 'POST':
         formset = ChoiceFormFormSet.ChoiceFormset(request.POST)
         poll_form = QuestionForm(request.POST, request.FILES)
@@ -23,7 +22,6 @@ def create_poll(request):
                 status = poll_form.cleaned_data.get('status'),
             )
             question.save()
-            # pass
             for i in range(len(formset)):
                 Choice.objects.create(
                     question=question,
@@ -36,7 +34,6 @@ def create_poll(request):
         poll_form = QuestionForm()
         formset = ChoiceFormFormSet.ChoiceFormset()
     
-    # context = {'poll_form':poll_form, 'formset':formset}
     context['poll_form'] = poll_form
     context['formset'] = formset
 
