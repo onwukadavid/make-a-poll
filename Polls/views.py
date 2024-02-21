@@ -4,7 +4,7 @@ from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse
 from Polls.models import Choice, Question
 from django.shortcuts import get_object_or_404
-from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet
+from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceFormSet
 
 def create_poll(request):
     context = {}
@@ -73,3 +73,75 @@ def result(request, username, slug):
 
     context = {'choices':choices, 'poll':poll}
     return render(request, 'Polls/result.html', context)
+
+
+# Form creates new poll rather than update existing poll
+def edit_poll(request, username, slug):
+    # get the object
+    context = {}
+    poll = get_object_or_404(Question, user__username=username, slug=slug)
+
+    # check if the post or get method
+    if request.method == 'POST':
+
+        # populate the poll form and choice formset
+        poll_form = QuestionForm(request.POST)
+        formset = EditChoiceFormSet.EditChoiceFormset(request.POST)
+
+        # check if the forms are valid
+        if poll_form.is_valid() and formset.is_valid():
+            poll.objects.update(
+                user = request.user,
+                title = poll_form.cleaned_data.get('title'),
+                description = poll_form.cleaned_data.get('description'),
+                thumbnail = poll_form.cleaned_data.get('thumbnail'),
+                question = poll_form.cleaned_data.get('question'),
+                status = poll_form.cleaned_data.get('status'),
+            )
+
+            # Fix this
+
+            # check if choice exists on question i.e question.choices
+            # for form in formset.forms:
+            #     choice = Choice(
+            #         question=question,
+            #         text = form.cleaned_data.get('text')
+            #     )
+            #     choice.save()
+
+            # redirect on success
+            return HttpResponseRedirect(redirect_to=reverse('poll:all-polls'))
+        else:
+
+            # return error on fail
+            context['error'] = 'An error occurred'
+    else:
+        initial_data = {
+                'user':request.user,
+                'title':poll.title,
+                'description':poll.description,
+                'thumbnail':poll.thumbnail,
+                'question':poll.question,
+                'status':poll.status,
+            }
+        initial_formset_data = [{'text':c.text} for c in poll.choices.all()]
+
+        # This should be in forms.py
+        # extra = 3 - len(initial_formset_data)
+        # EditChoiceFormset = formset_factory(ChoiceForm, extra=extra)
+
+        formset = EditChoiceFormSet.EditChoiceFormset(initial=initial_formset_data)
+        poll_form = QuestionForm(initial=initial_data)
+
+    context['poll_form'] = poll_form
+    context['formset'] = formset
+    context['poll'] = poll
+
+    # render on get request
+    return render(request, 'Polls/edit_poll.html', context=context)
+
+
+
+
+
+    

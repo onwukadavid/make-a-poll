@@ -9,7 +9,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{% url 'polls:create-poll' %}">Create New Poll</a>
+    <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | Current user: {{ user}}
     {% for poll in polls %}
         <a href="{% url 'polls:view-poll' poll.user.username poll.slug %}">
             <div class="card" style="width: 18rem;border:solid 1px black;">
@@ -18,6 +18,12 @@
                     <p class="card-text">{{ poll.title }}</p>
                     <p class="card-text">{{ poll.description }}</p>
                     <small>{{ poll.status }} | by {{ poll.user.username }}</small>
+                    {% if user == poll.user %}
+                        <p>
+                            <a href="{% url 'polls:edit-poll' user.username poll.slug %}">edit</a>
+                        </p>
+                    {% endif %}
+
                 </div>
             </div>
         </a>

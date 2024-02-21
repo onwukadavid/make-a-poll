@@ -30,7 +30,7 @@ class BaseChoiceFormSet(BaseFormSet):
             
 
 # This formset is used to generate and handle multiple Choice Form
-class ChoiceFormFormSet():
+class ChoiceFormFormSet:
     ChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=3)
 
 class QuestionForm(forms.Form):
@@ -46,3 +46,7 @@ class QuestionForm(forms.Form):
         if get_title.exists():
             raise ValidationError('Title already exists.')
         return title
+    
+
+class EditChoiceFormSet(forms.Form):
+    EditChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=0) # check if poll has choice if not extra should not be 0
