@@ -46,7 +46,8 @@ def view_poll(request, username, slug):
     return render(request, 'Polls/detail_poll.html', context)
 
 def all_polls(request):
-    polls = Question.objects.all().filter(status='published')[::1]
+    # polls = Question.objects.all().filter(status='published')[::1]
+    polls = Question.objects.all()[::1]
     context = {'polls':polls}
     return render(request, 'Polls/home.html', context)
 
@@ -90,14 +91,22 @@ def edit_poll(request, username, slug):
 
         # check if the forms are valid
         if poll_form.is_valid() and formset.is_valid():
-            poll.objects.update(
-                user = request.user,
-                title = poll_form.cleaned_data.get('title'),
-                description = poll_form.cleaned_data.get('description'),
-                thumbnail = poll_form.cleaned_data.get('thumbnail'),
-                question = poll_form.cleaned_data.get('question'),
-                status = poll_form.cleaned_data.get('status'),
-            )
+            # poll.save(commit=False)
+            # poll.objects.update(
+            #     user = request.user,
+            #     title = poll_form.cleaned_data.get('title'),
+            #     description = poll_form.cleaned_data.get('description'),
+            #     thumbnail = poll_form.cleaned_data.get('thumbnail'),
+            #     question = poll_form.cleaned_data.get('question'),
+            #     status = poll_form.cleaned_data.get('status'),
+            # )
+            poll.user = request.user
+            poll.title = poll_form.cleaned_data.get('title')
+            poll.description = poll_form.cleaned_data.get('description')
+            poll.thumbnail = poll_form.cleaned_data.get('thumbnail')
+            poll.question = poll_form.cleaned_data.get('question')
+            poll.status = poll_form.cleaned_data.get('status')
+            poll.save()
 
             # Fix this
 
@@ -110,7 +119,7 @@ def edit_poll(request, username, slug):
             #     choice.save()
 
             # redirect on success
-            return HttpResponseRedirect(redirect_to=reverse('poll:all-polls'))
+            return HttpResponseRedirect(redirect_to=reverse('polls:all-polls'))
         else:
 
             # return error on fail

@@ -43,6 +43,7 @@ class QuestionForm(forms.Form):
     def clean_title(self):
         title = self.cleaned_data['title']
         get_title = Question.objects.filter(title=title)
+        # print(self.poll)
         if get_title.exists():
             raise ValidationError('Title already exists.')
         return title

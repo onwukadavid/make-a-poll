@@ -46,8 +46,16 @@ class Question(SoftDeleteModel, models.Model):
     def __str__(self):
         return self.title
     
-    # Override save method to automatically create slugs
+    # Override save method to automatically create slugs # USE THIS IN PRODUCTION
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title)
+    #     return super().save(*args, **kwargs)
+
+    # Temporary solution
     def save(self, *args, **kwargs):
+        if self.status == 'draft':
+            self.slug = slugify(self.title)
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
