@@ -33,6 +33,7 @@ class BaseChoiceFormSet(BaseFormSet):
 class ChoiceFormFormSet:
     ChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=3)
 
+# switch to model form so as to pass the model instance to the form
 class QuestionForm(forms.Form):
     title = forms.CharField(max_length=50)
     description = forms.CharField(widget=forms.Textarea)
@@ -40,11 +41,12 @@ class QuestionForm(forms.Form):
     question = forms.CharField(max_length=255)
     status = forms.ChoiceField(choices=STATUS, widget=forms.Select)
 
+    # Check if title exists for a particular user. if it does return error
     def clean_title(self):
         title = self.cleaned_data['title']
         get_title = Question.objects.filter(title=title)
         # print(self.poll)
-        if get_title.exists():
+        if get_title.exists() :
             raise ValidationError('Title already exists.')
         return title
     
