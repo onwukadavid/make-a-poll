@@ -46,6 +46,7 @@ class Question(SoftDeleteModel, models.Model):
     def __str__(self):
         return self.title
     
+    # switching to ModelForm might make this obsolete
     # Override save method to automatically create slugs # USE THIS IN PRODUCTION
     # def save(self, *args, **kwargs):
     #     if not self.slug:
