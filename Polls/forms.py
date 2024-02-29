@@ -29,6 +29,8 @@ class BaseChoiceFormSet(BaseFormSet):
                 # raise ValidationError("Please provide a text for all choice fields.")
             
 
+
+'''TODO: Create choiceformset using normal formset, model formset and inline formset'''
 # This formset is used to generate and handle multiple Choice Form
 class ChoiceFormFormSet:
     ChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=3) # set max num to do what is in line 138 in the views.py file
