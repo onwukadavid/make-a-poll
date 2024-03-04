@@ -8,13 +8,14 @@ from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceF
 
 def create_poll(request):
     context = {}
-    
+    user=request.user
+
     if request.method == 'POST':
         formset = ChoiceFormFormSet.ChoiceFormset(request.POST)
-        poll_form = QuestionForm(request.POST, request.FILES)
+        poll_form = QuestionForm( request.POST, request.FILES, instance=None, user=user)
         if poll_form.is_valid() and formset.is_valid():
             question = Question(
-                user = request.user,
+                user = user,
                 title = poll_form.cleaned_data.get('title'),
                 description = poll_form.cleaned_data.get('description'),
                 thumbnail = poll_form.cleaned_data.get('thumbnail'),
@@ -81,26 +82,22 @@ def edit_poll(request, username, slug):
     # get the object
     context = {}
     poll = get_object_or_404(Question, user__username=username, slug=slug)
+    choices = get_list_or_404(Choice, question=poll)
+    user = request.user
+    
 
     # check if the post or get method
     if request.method == 'POST':
 
         # populate the poll form and choice formset
-        poll_form = QuestionForm(request.POST)
+        poll_form = QuestionForm(request.POST, instance=poll)
+        # print(poll)
         formset = EditChoiceFormSet.EditChoiceFormset(request.POST)
 
         # check if the forms are valid
         if poll_form.is_valid() and formset.is_valid():
-            # poll.save(commit=False)
-            # poll.objects.update(
-            #     user = request.user,
-            #     title = poll_form.cleaned_data.get('title'),
-            #     description = poll_form.cleaned_data.get('description'),
-            #     thumbnail = poll_form.cleaned_data.get('thumbnail'),
-            #     question = poll_form.cleaned_data.get('question'),
-            #     status = poll_form.cleaned_data.get('status'),
-            # )
-            poll.user = request.user
+
+            poll.user = user
             poll.title = poll_form.cleaned_data.get('title')
             poll.description = poll_form.cleaned_data.get('description')
             poll.thumbnail = poll_form.cleaned_data.get('thumbnail')
@@ -108,15 +105,15 @@ def edit_poll(request, username, slug):
             poll.status = poll_form.cleaned_data.get('status')
             poll.save()
 
-            # Fix this
+            # Fix this. ChoiceFormset should return just 3 forms and should be updated
 
             # check if choice exists on question i.e question.choices
-            # for form in formset.forms:
-            #     choice = Choice(
-            #         question=question,
-            #         text = form.cleaned_data.get('text')
-            #     )
-            #     choice.save()
+            # print(len(formset.forms))
+            for i in range(len(choices)):
+            # iterate over form and choice list and assign their values
+                choices[i].text = formset[i].cleaned_data.get('text')
+                choices[i].save()
+                continue
 
             # redirect on success
             return HttpResponseRedirect(redirect_to=reverse('polls:all-polls'))
@@ -137,10 +134,11 @@ def edit_poll(request, username, slug):
 
         # This should be in forms.py
         # extra = 3 - len(initial_formset_data)
-        # EditChoiceFormset = formset_factory(ChoiceForm, extra=extra)
+        # EditChoiceFormset = formset_factory(ChoiceForm, extra=extra)7
 
-        formset = EditChoiceFormSet.EditChoiceFormset(initial=initial_formset_data)
+        # fix choice formset to save
         poll_form = QuestionForm(initial=initial_data)
+        formset = EditChoiceFormSet.EditChoiceFormset(initial=initial_formset_data)
 
     context['poll_form'] = poll_form
     context['formset'] = formset
@@ -148,9 +146,3 @@ def edit_poll(request, username, slug):
 
     # render on get request
     return render(request, 'Polls/edit_poll.html', context=context)
-
-
-
-
-
-    

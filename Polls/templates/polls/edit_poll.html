@@ -41,13 +41,13 @@
             {{ poll_form.status.errors }}
         </div>
 
-        <!-- {{ formset.management_form }} -->
+        {{ formset.management_form }}
 
-        <!-- {% for form in formset %}
+        {% for form in formset %}
         {{ form }}
-        {% endfor %} -->
+        {% endfor %}
         <div>
-            {{ formset }}
+            <!-- {{ formset }} -->
             <!-- {% if formset.errors %}
                 {% for error in formset.errors %}
                     {{ error }}
