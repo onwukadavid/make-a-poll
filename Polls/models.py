@@ -1,5 +1,6 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.conf import settings
+from django.forms import ValidationError
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 import datetime
@@ -72,6 +73,9 @@ class Question(SoftDeleteModel, models.Model):
     
     class Meta:
         db_table = 'Questions'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'title'], name='unique_user_question_title', violation_error_message='Title already exists')
+        ]
 
     
 
