@@ -1,3 +1,5 @@
+'''TODO: CHANGE ALL questions to polls'''
+
 from django.forms import ValidationError, formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, redirect, render
@@ -81,7 +83,9 @@ def result(request, username, slug):
     return render(request, 'Polls/result.html', context)
 
 
-# Form creates new poll rather than update existing poll
+'''TODO: make choice formset dynamic if status is draft i.e allow for creating and deleting choice formset forms
+         allow for saving empty choice formset forms
+'''
 def edit_poll(request, username, slug):
     # get the object
     context = {}
@@ -95,7 +99,6 @@ def edit_poll(request, username, slug):
 
         # populate the poll form and choice formset
         poll_form = QuestionForm(request.POST, instance=poll)
-        # print(poll)
         formset = EditChoiceFormSet.EditChoiceFormset(request.POST)
 
         # check if the forms are valid

@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <p class="card-text">{{ poll.title }}</p>
                     <p class="card-text">{{ poll.description }}</p>
-                    <small>{{ poll.status }} | by {{ poll.user.username }}|        share</small>
+                    <small>{{ poll.status }} | by {{ poll.user.username }}| share</small> 
                     {% if user == poll.user %}
                         <p>
                             <a href="{% url 'polls:edit-poll' user.username poll.slug %}">edit</a>

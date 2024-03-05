@@ -51,7 +51,7 @@ class QuestionForm(forms.ModelForm):
     
 
 class EditChoiceFormSet(forms.Form):
-    EditChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=0) # check if poll has choice if not extra should not be 0
+    EditChoiceFormset = formset_factory(ChoiceForm, BaseChoiceFormSet, extra=0, max_num=3) # check if poll has choice if not extra should not be 0
 
 # class EditChoiceInlineFormset():
 #     EditChoiceFormset = inlineformset_factory(Question, Choice, fields=['text'], max_num=3)
