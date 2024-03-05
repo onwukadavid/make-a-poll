@@ -1,8 +1,8 @@
-from django.forms import formset_factory
+from django.forms import ValidationError, formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse
-from Polls.models import Choice, Question
+from Polls.models import Choice, Question, IntegrityError
 from django.shortcuts import get_object_or_404
 from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceFormSet
 
@@ -22,13 +22,17 @@ def create_poll(request):
                 question = poll_form.cleaned_data.get('question'),
                 status = poll_form.cleaned_data.get('status'),
             )
-            question.save()
-            for i in range(len(formset)):
-                Choice.objects.create(
-                    question=question,
-                    text = formset.cleaned_data[i].get('text')
-                )
-            return HttpResponseRedirect(reverse('polls:all-polls'))#work on this
+            try:
+                question.save() # raises an IntegrityError if the title already exists for a particlar user
+            except IntegrityError as e:
+                poll_form.add_error('title', 'Title already exists')
+            else:
+                for i in range(len(formset)):
+                    Choice.objects.create(
+                        question=question,
+                        text = formset.cleaned_data[i].get('text')
+                    )
+                return HttpResponseRedirect(reverse('polls:all-polls'))#work on this
         else:
             context['error'] = "Form contains errors"
     else:

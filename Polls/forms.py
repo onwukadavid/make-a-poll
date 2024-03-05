@@ -48,26 +48,6 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ['title', 'description', 'thumbnail', 'question', 'status']
-
-    # Check if title exists for a particular user. if it does return error
-    def clean_title(self):
-        
-        title = self.cleaned_data['title']
-        try:
-            user = self.instance.user # if instance is passed, grab the user from the instance
-        except Question.user.RelatedObjectDoesNotExist:
-            user = self.user # grab the user from the kwargs, if instance isn't passed
-        get_title = Question.objects.filter(title=title, user=user)
-        
-        if str(self.instance) is '':
-            if get_title.exists():
-                print('Hi1')
-                raise ValidationError('Title already exists')
-        else:
-            if get_title.exists() and not(self.instance):
-                print('Hi2')
-                raise ValidationError('Title already exists')
-        return title
     
 
 class EditChoiceFormSet(forms.Form):
