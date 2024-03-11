@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 import datetime
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
-from Manager import AuthorManager
+from .managers import AuthorManager
 
 
 # This is done so that I can change the User Model mid project without any issues. 
@@ -13,7 +13,7 @@ class User(AbstractUser):
 class Author(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True)
     email    = models.EmailField(max_length=50, unique=True)
-    password = models.CharField()
+    password = models.CharField(max_length=50)
     verified_at = models.DateTimeField()
     last_login = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,3 +33,7 @@ class Author(AbstractBaseUser):
         return self.email
     
     # SET PERMISSIONS BEFORE SWAPPING 
+    class Meta:
+        permissions = [
+            ('can_ban_user', 'Can ban users')
+        ]
