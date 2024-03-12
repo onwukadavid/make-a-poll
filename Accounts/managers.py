@@ -28,12 +28,14 @@ class AuthorManager(BaseUserManager):
         if not email:
             raise ValueError('User must provide an email')
         
-        user = self.model(
+        user = self.create_user(
         username = self.model.normalize_username(username),
         email = self.normailize_email(email),
         password = password # why do we do this and ont how it is in create_user?
-        )
+        ) # superuser just call the create_user method. Then it sets the necessary fields on the user model to Tru to denote an admin user
+
         user.is_admin = True
+        user.is_staff = True
         user.save(using=self._db) # why do we do this?
 
         return user
