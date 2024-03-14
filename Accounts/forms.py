@@ -2,6 +2,7 @@ from django import forms
 from models import Author
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
 
 
 # Create Registeration form
@@ -20,6 +21,12 @@ class UserRegistrationForm(forms.Form):
         return password2
 
 # create Login form if necessary
+# class userLoginForm(forms.Form):
+#     email = forms.EmailField(max_length=50)
+#     password = forms.PasswordInput()
+
+#     def clean(self):
+#         authenticate()
 
 # create update form if necessary
 class UserUpdateForm(forms.ModelForm):
