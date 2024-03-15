@@ -5,3 +5,9 @@ def register_user():
 
 def login_user():
     ...
+
+def update_user_details():
+    ...
+
+def delete_user():
+    ...

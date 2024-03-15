@@ -21,12 +21,9 @@ class UserRegistrationForm(forms.Form):
         return password2
 
 # create Login form if necessary
-# class userLoginForm(forms.Form):
-#     email = forms.EmailField(max_length=50)
-#     password = forms.PasswordInput()
-
-#     def clean(self):
-#         authenticate()
+class userLoginForm(forms.Form):
+    email = forms.EmailField(max_length=50)
+    password = forms.PasswordInput()
 
 # create update form if necessary
 class UserUpdateForm(forms.ModelForm):
