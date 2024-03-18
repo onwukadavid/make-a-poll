@@ -1,5 +1,5 @@
 from django import forms
-from models import Author
+from Accounts.models import Author
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
