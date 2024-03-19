@@ -7,6 +7,9 @@ from django.contrib.auth import authenticate, login
 def register_user(request):
     context = []
     if request.method == 'post':
+        if request.session.test_cookie_worked():
+            request.session.delete_test_cookie()
+
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -21,9 +24,17 @@ def register_user(request):
             author.save()
 
             login(request, author)
+            request.session['user'] = author
+            # set se3ssion expiry age
+            
             return redirect('polls:all-polls')
             
     else:
+        user = request.session.get('user', False)
+        if user:
+            return redirect('polls:all-polls')
+        
+        request.session.set_test_cookie()
         form = UserRegistrationForm()
 
     context['form'] = form
@@ -43,12 +54,19 @@ def login_user(request):
 
             if user:
                 login(request, user)
+                request.session['user'] = user
+                # set se3ssion expiry age
+
                 return redirect('polls:all-polls')
             else:
                 form.add_error('Username/Password does not match')
         else:
             return render(request, 'Accounts/user-registration-form.html', context)
     else:
+        user = request.session.get('user', False)
+        if user:
+            return redirect('polls:all-polls')
+        
         form = userLoginForm(request.POST)
         context['form'] = form
 
