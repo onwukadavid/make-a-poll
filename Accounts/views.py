@@ -24,13 +24,13 @@ def register_user(request):
             author.save()
 
             login(request, author)
-            request.session['user'] = author
-            # set se3ssion expiry age
+            request.session["user"] = author
+            # set session expiry age
             
             return redirect('polls:all-polls')
             
     else:
-        user = request.session.get('user', False)
+        user = request.session.get("user", False)
         if user:
             return redirect('polls:all-polls')
         
@@ -54,8 +54,8 @@ def login_user(request):
 
             if user:
                 login(request, user)
-                request.session['user'] = user
-                # set se3ssion expiry age
+                request.session["user"] = user
+                # set session expiry age
 
                 return redirect('polls:all-polls')
             else:
@@ -63,7 +63,7 @@ def login_user(request):
         else:
             return render(request, 'Accounts/user-registration-form.html', context)
     else:
-        user = request.session.get('user', False)
+        user = request.session.get("user", False)
         if user:
             return redirect('polls:all-polls')
         
