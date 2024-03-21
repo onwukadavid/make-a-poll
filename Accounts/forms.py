@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(max_length=50)
     email = forms.EmailField(max_length=100)
-    password = forms.PasswordInput()
-    password2 = forms.PasswordInput()
+    password = forms.CharField(help_text='Passowrd must be long enough')
+    password2 = forms.CharField()
 
     def clean_password2(self):
         password1 = self.cleaned_data['password'] 
@@ -22,8 +22,9 @@ class UserRegistrationForm(forms.Form):
 
 # create Login form if necessary
 class userLoginForm(forms.Form):
-    email = forms.EmailField(max_length=50)
-    password = forms.PasswordInput()
+    # email = forms.EmailField(max_length=50)
+    username = forms.CharField(max_length=50)
+    password = forms.CharField()
 
 # create update form if necessary
 class UserUpdateForm(forms.ModelForm):
