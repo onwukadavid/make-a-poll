@@ -4,6 +4,11 @@
 
 <form action="{% url 'accounts:login' %}" method="POST" novalidate>
     {% csrf_token %}
+    {% if error %}
+        {{ error }}
+        <br>
+    {% endif %}
+
     {% for field in form %}
         {% if field.errors %}
             {{ field.errors }}

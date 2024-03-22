@@ -57,6 +57,7 @@ def login_user(request):
                 login(request, user)
                 request.session["user"] = user.id
                 # set session expiry age
+                # request.session.set_expiry(10)
 
                 return redirect('polls:all-polls')
             else:
@@ -101,3 +102,15 @@ def delete_user(request, email):
     author.is_active = False
     author.save()
     return redirect('polls:all-polls')
+
+def logout_user(request):
+    print(request.session['user'])
+    try:
+        # request.session.flush()
+        del request.session['user']
+        print(request.session['user'])
+
+    except KeyError:
+        pass
+    return redirect('polls:all-polls')
+    # return redirect('accounts:login')

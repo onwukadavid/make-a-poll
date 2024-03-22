@@ -9,7 +9,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | Current user: {{ user}}
+    <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | <a href="{% url 'accounts:login' %}">Login</a> | <a href="{% url 'accounts:logout' %}">Logout</a> | Current user: {{ user}}
     {% for poll in polls %}
         <a href="{% url 'polls:view-poll' poll.user.username poll.slug %}">
             <div class="card" style="width: 18rem;border:solid 1px black;">
