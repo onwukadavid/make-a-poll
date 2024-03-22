@@ -59,6 +59,9 @@ def login_user(request):
                 # set session expiry age
                 # request.session.set_expiry(10)
 
+                if request.POST.get('next'):
+                    return redirect(request.POST.get('next'))
+                
                 return redirect('polls:all-polls')
             else:
                 error = 'Username/Password does not match'
@@ -70,6 +73,8 @@ def login_user(request):
             return redirect('polls:all-polls')
         
         form = userLoginForm()
+        if 'next' in request.GET:
+            context['next'] = request.GET.get('next')
 
     context['form'] = form
     return render(request, 'Accounts/user-login-form.html', context)
@@ -104,11 +109,11 @@ def delete_user(request, email):
     return redirect('polls:all-polls')
 
 def logout_user(request):
-    print(request.session['user'])
+    # print(request.session['user'])
     try:
-        # request.session.flush()
-        del request.session['user']
-        print(request.session['user'])
+        request.session.flush()
+        # del request.session['user']
+        # print(request.session['user'])
 
     except KeyError:
         pass

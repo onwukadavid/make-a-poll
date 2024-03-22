@@ -4,10 +4,12 @@ from django.forms import ValidationError, formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, redirect, render
 from django.urls import reverse
-from Polls.models import Choice, Question, IntegrityError
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from Polls.models import Choice, Question, IntegrityError
 from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceFormSet
 
+@login_required(login_url='accounts:login')
 def create_poll(request):
     context = {}
     user=request.user
@@ -61,6 +63,7 @@ def all_polls(request):
 def delete_poll():
     ...
 
+@login_required(login_url='accounts:login')
 def vote(request, username, slug):
     poll = get_object_or_404(Question, user__username=username, slug=slug)
     try:
@@ -74,7 +77,7 @@ def vote(request, username, slug):
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:result', args=[username, slug]))
 
-
+@login_required(login_url='accounts:login')
 def result(request, username, slug):
     poll = get_object_or_404(Question, user__username=username, slug=slug)
     choices = get_list_or_404(Choice, question=poll)
