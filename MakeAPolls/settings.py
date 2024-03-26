@@ -152,3 +152,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '/thumbnails/')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 10

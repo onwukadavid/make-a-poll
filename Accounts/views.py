@@ -56,11 +56,10 @@ def login_user(request):
             if user:
                 login(request, user)
                 request.session["user"] = user.id
-                # set session expiry age
-                # request.session.set_expiry(10)
 
-                if request.POST.get('next'):
-                    return redirect(request.POST.get('next'))
+                next_url = request.POST.get('next')
+                if next_url:
+                    return redirect(next_url)
                 
                 return redirect('polls:all-polls')
             else:
