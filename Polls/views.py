@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from Polls.models import Choice, Question, IntegrityError
 from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceFormSet
+from django.contrib.sessions.models import Session
 
 @login_required(login_url='accounts:login')
 def create_poll(request):
@@ -57,7 +58,22 @@ def view_poll(request, username, slug):
 def all_polls(request):
     # polls = Question.objects.all().filter(status='published')[::1]
     polls = Question.objects.all()[::1]
-    context = {'polls':polls}
+    voted_polls_in_session = request.session.get('user_voted_polls', False)
+
+    # TODO: FIX THIS
+    # sort in order of session list
+    if not voted_polls_in_session:
+        request.session['user_voted_polls'] = []
+    else:
+        voted_polls = get_list_or_404(Question, pk__in=voted_polls_in_session)
+        print(voted_polls)
+        voted_polls = sorted(voted_polls, key=lambda x: voted_polls_in_session.index(x))
+        print(voted_polls)
+    
+    context = {'polls':polls, 'voted_polls':voted_polls}
+    s = Session.objects.get(pk='egm9pfy5ikt29y64q2recxyj74m92wwt')
+    print(s.get_decoded())
+
     return render(request, 'Polls/home.html', context)
 
 def delete_poll():
@@ -75,6 +91,22 @@ def vote(request, username, slug):
     else:
         selected_choice.votes+=1
         selected_choice.save()
+
+
+        if 'user_voted_polls' in request.session:
+            voted_polls = request.session.get('user_voted_polls', False)
+            if len(voted_polls) == 3:
+                voted_polls.pop()
+
+            if poll.id in voted_polls:
+                voted_polls.remove(poll.id)
+
+            # if not (len(voted_polls) > 0 and (poll.id == voted_polls[0])):
+            #     request.session['user_voted_polls'].insert(0, poll.id)
+                
+            request.session['user_voted_polls'].insert(0, poll.id)
+
+
         return HttpResponseRedirect(reverse('polls:result', args=[username, slug]))
 
 @login_required(login_url='accounts:login')
