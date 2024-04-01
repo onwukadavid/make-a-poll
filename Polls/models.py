@@ -34,7 +34,7 @@ class SoftDeleteModel(models.Model):
 
 
 class Question(SoftDeleteModel, models.Model):
-    user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title       = models.CharField(max_length=50)
     slug        = models.SlugField(max_length=50) # editable=False also fix admin issue with slugs
     description = models.CharField(max_length=50, null=True, blank=True)
@@ -74,7 +74,7 @@ class Question(SoftDeleteModel, models.Model):
     class Meta:
         db_table = 'Questions'
         constraints = [
-            models.UniqueConstraint(fields=['user', 'title'], name='unique_user_question_title', violation_error_message='Title already exists')
+            models.UniqueConstraint(fields=['author', 'title'], name='unique_author_question_title', violation_error_message='Title already exists')
         ]
 
     

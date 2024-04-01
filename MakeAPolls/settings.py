@@ -100,7 +100,7 @@ DATABASES = {
 }
 
 # custom user model
-AUTH_USER_MODEL = 'Accounts.User'
+AUTH_USER_MODEL = 'Accounts.Author'
 
 
 # Password validation

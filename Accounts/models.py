@@ -6,8 +6,8 @@ from .managers import AuthorManager
 
 
 # This is done so that I can change the User Model mid project without any issues. 
-class User(AbstractUser):
-    pass
+# class User(AbstractUser):
+#     pass
 
 # create cuntom user model
 class Author(AbstractBaseUser):
@@ -25,7 +25,7 @@ class Author(AbstractBaseUser):
     objects = AuthorManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'email', 'password']
+    REQUIRED_FIELDS = ['username', 'password']
 
     def get_username(self):
         return self.username

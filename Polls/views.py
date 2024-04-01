@@ -60,19 +60,16 @@ def all_polls(request):
     polls = Question.objects.all()[::1]
     voted_polls_in_session = request.session.get('user_voted_polls', False)
 
-    # TODO: FIX THIS
-    # sort in order of session list
     if not voted_polls_in_session:
         request.session['user_voted_polls'] = []
+        voted_polls = request.session['user_voted_polls']
     else:
-        voted_polls = get_list_or_404(Question, pk__in=voted_polls_in_session)
-        print(voted_polls)
-        voted_polls = sorted(voted_polls, key=lambda x: voted_polls_in_session.index(x))
-        print(voted_polls)
+        voted_polls_objects = get_list_or_404(Question, pk__in=voted_polls_in_session)
+        voted_polls = sorted(voted_polls_objects, key=lambda x: voted_polls_in_session.index(x.id))
     
     context = {'polls':polls, 'voted_polls':voted_polls}
-    s = Session.objects.get(pk='egm9pfy5ikt29y64q2recxyj74m92wwt')
-    print(s.get_decoded())
+    # s = Session.objects.get(pk='egm9pfy5ikt29y64q2recxyj74m92wwt')
+    # print(s.get_decoded())
 
     return render(request, 'Polls/home.html', context)
 
@@ -92,20 +89,16 @@ def vote(request, username, slug):
         selected_choice.votes+=1
         selected_choice.save()
 
-
         if 'user_voted_polls' in request.session:
-            voted_polls = request.session.get('user_voted_polls', False)
-            if len(voted_polls) == 3:
-                voted_polls.pop()
+            voted_polls = request.session.get('user_voted_polls')
 
             if poll.id in voted_polls:
                 voted_polls.remove(poll.id)
 
-            # if not (len(voted_polls) > 0 and (poll.id == voted_polls[0])):
-            #     request.session['user_voted_polls'].insert(0, poll.id)
-                
             request.session['user_voted_polls'].insert(0, poll.id)
 
+            if len(voted_polls) > 3:
+                voted_polls.pop()
 
         return HttpResponseRedirect(reverse('polls:result', args=[username, slug]))
 

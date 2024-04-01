@@ -25,7 +25,7 @@ def register_user(request):
             author.save()
 
             login(request, author)
-            request.session["user"] = author.email
+            request.session["user"] = author.id # switch to user.id or author.id
             # set session expiry age
             
             return redirect('polls:all-polls')
@@ -67,7 +67,6 @@ def login_user(request):
                 context['error'] = error
     else:
         user = request.session.get("user", False)
-        print(user)
         if user:
             return redirect('polls:all-polls')
         

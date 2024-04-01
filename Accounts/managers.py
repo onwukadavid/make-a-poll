@@ -14,7 +14,7 @@ class AuthorManager(BaseUserManager):
         
         user = self.model(
         username = self.model.normalize_username(username),
-        email = self.normailize_email(email),
+        email = self.normalize_email(email),
         )
         user.set_password(password)
         user.save(using=self._db) # why do we do this?
@@ -31,13 +31,15 @@ class AuthorManager(BaseUserManager):
         
         user = self.create_user(
         username = self.model.normalize_username(username),
-        email = self.normailize_email(email),
+        email = self.normalize_email(email),
         password = password # why do we do this and ont how it is in create_user?
         ) # superuser just call the create_user method. Then it sets the necessary fields on the user model to Tru to denote an admin user
 
         user.is_admin = True
-        user.is_staff = True
+        # user.is_staff = True
         user.verified_at = timezone.now()
+        user.is_verified = True
+        user.is_active = True
         user.save(using=self._db) # why do we do this?
 
         return user
