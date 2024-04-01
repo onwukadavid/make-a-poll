@@ -9,7 +9,22 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | Current user: {{ user}}
+    {% if user.is_authenticated %}
+        <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | <a href="{% url 'accounts:logout' %}">Logout</a> | Current user: {{ user}}
+    {% else %}
+        <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | <a href="{% url 'accounts:login' %}">Login</a>
+    {% endif %}
+
+    <br>
+    <br>
+    {% if voted_polls %}
+        {% for voted_poll in voted_polls %}
+            <a href="{% url 'polls:result' voted_poll.user.username voted_poll.slug %}">{{ voted_poll.title }}</a>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <br>
+
     {% for poll in polls %}
         <a href="{% url 'polls:view-poll' poll.user.username poll.slug %}">
             <div class="card" style="width: 18rem;border:solid 1px black;">

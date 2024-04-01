@@ -13,8 +13,9 @@ class User(AbstractUser):
 class Author(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True)
     email    = models.EmailField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    verified_at = models.DateTimeField()
+    password = models.TextField()
+    verified_at = models.DateTimeField(null=True)
+    is_verified = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)

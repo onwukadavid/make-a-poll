@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -36,6 +37,7 @@ class AuthorManager(BaseUserManager):
 
         user.is_admin = True
         user.is_staff = True
+        user.verified_at = timezone.now()
         user.save(using=self._db) # why do we do this?
 
         return user
