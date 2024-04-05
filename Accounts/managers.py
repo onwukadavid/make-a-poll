@@ -40,6 +40,7 @@ class AuthorManager(BaseUserManager):
         user.verified_at = timezone.now()
         user.is_verified = True
         user.is_active = True
+        user.is_superuser = True
         user.save(using=self._db) # why do we do this?
 
         return user

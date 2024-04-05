@@ -3,6 +3,9 @@ from Accounts.forms import UserRegistrationForm, userLoginForm, UserUpdateForm
 from Accounts.models import Author
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import get_user_model
+
+# User = get_user_model()
 
 
 def register_user(request):
@@ -49,9 +52,9 @@ def login_user(request):
         context['form'] = form
 
         if form.is_valid():
-            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
 
             if user:
                 login(request, user)

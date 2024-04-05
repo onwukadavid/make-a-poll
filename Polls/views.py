@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from Polls.models import Choice, Question, IntegrityError
 from Polls.forms import ChoiceForm, QuestionForm, ChoiceFormFormSet, EditChoiceFormSet
 from django.contrib.sessions.models import Session
+from pprint import pprint
 
 @login_required(login_url='accounts:login')
 def create_poll(request):
@@ -51,12 +52,19 @@ def create_poll(request):
 
 def view_poll(request, username, slug):
     
-    poll = get_object_or_404(Question, user__username=username, slug=slug)
+    poll = get_object_or_404(Question, author__username=username, slug=slug)
     context = {'poll':poll}
     return render(request, 'Polls/detail_poll.html', context)
 
 def all_polls(request):
     # polls = Question.objects.all().filter(status='published')[::1]
+    user = request.user
+    print(user)
+    print(user.has_perm('Polls.delete_question'))
+    pprint(user.get_user_permissions())
+    pprint(user.get_group_permissions())
+    # pprint(user.get_all_permissions())
+
     polls = Question.objects.all()[::1]
     voted_polls_in_session = request.session.get('user_voted_polls', False)
 
@@ -78,7 +86,7 @@ def delete_poll():
 
 @login_required(login_url='accounts:login')
 def vote(request, username, slug):
-    poll = get_object_or_404(Question, user__username=username, slug=slug)
+    poll = get_object_or_404(Question, author__username=username, slug=slug)
     try:
         choice_id = request.POST.get('choice')
         selected_choice = poll.choices.get(pk=choice_id)
@@ -104,7 +112,7 @@ def vote(request, username, slug):
 
 @login_required(login_url='accounts:login')
 def result(request, username, slug):
-    poll = get_object_or_404(Question, user__username=username, slug=slug)
+    poll = get_object_or_404(Question, author__username=username, slug=slug)
     choices = get_list_or_404(Choice, question=poll)
 
     context = {'choices':choices, 'poll':poll}

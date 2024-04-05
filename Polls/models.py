@@ -76,6 +76,9 @@ class Question(SoftDeleteModel, models.Model):
         constraints = [
             models.UniqueConstraint(fields=['author', 'title'], name='unique_author_question_title', violation_error_message='Title already exists')
         ]
+        permissions = [
+            ('can_hide_poll', 'can hide poll')
+        ]
 
     
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import datetime
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
 from .managers import AuthorManager
 
 
@@ -9,8 +9,8 @@ from .managers import AuthorManager
 # class User(AbstractUser):
 #     pass
 
-# create cuntom user model
-class Author(AbstractBaseUser):
+# create custom user model
+class Author(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     email    = models.EmailField(max_length=50, unique=True)
     password = models.TextField()
@@ -21,6 +21,7 @@ class Author(AbstractBaseUser):
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False) 
 
     objects = AuthorManager()
 
@@ -28,22 +29,23 @@ class Author(AbstractBaseUser):
     REQUIRED_FIELDS = ['username', 'password']
 
     def get_username(self):
-        return self.username
+        return self.email
+    
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
     
     def __str__(self):
         return self.email
     
-    # SET PERMISSIONS BEFORE SWAPPING 
     class Meta:
         permissions = [
             ('can_ban_user', 'Can ban users')
         ]
-
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
 
     @property
     def is_staff(self):
