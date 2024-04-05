@@ -11,7 +11,7 @@
 <body>
     <!-- <p>{{poll.question}}</p> -->
 
-    <form action="{% url 'polls:vote' poll.user.username poll.slug %}" method="post">
+    <form action="{% url 'polls:vote' poll.author.username poll.slug %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>{{poll.question}}</h1></legend>

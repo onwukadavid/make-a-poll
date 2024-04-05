@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="{% url 'polls:all-polls' %}">Home</a>
+    <br>
+
     {{ poll.question }} <br>
 
     {% for choice in choices %}

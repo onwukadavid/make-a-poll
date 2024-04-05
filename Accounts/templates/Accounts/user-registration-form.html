@@ -1,0 +1,17 @@
+{% extends "Accounts/base.html" %}
+
+{% block body %}
+
+<form action="{% url 'accounts:register' %}" method="POST" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+        {{ field.errors }}
+        {{ field.label }}: {{ field }}
+        {{ field.help_text }}
+        <br>
+    {% endfor %}
+
+    <button>Submit</button>
+</form>
+
+{% endblock body %}

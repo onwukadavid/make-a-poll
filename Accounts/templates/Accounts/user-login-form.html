@@ -1,0 +1,24 @@
+{% extends "Accounts/base.html" %}
+
+{% block body %}
+
+<form action="{% url 'accounts:login' %}" method="POST" novalidate>
+    {% csrf_token %}
+    {% if error %}
+        {{ error }}
+        <br>
+    {% endif %}
+
+    {% for field in form %}
+        {% if field.errors %}
+            {{ field.errors }}
+        {% endif %}
+        {{ field.label }}: {{ field }}
+        {{ field.help_text }}
+        <br>
+    {% endfor %}
+    <input type="text" name="next" value="{{ next }}" hidden>
+    <button>Submit</button>
+</form>
+
+{% endblock body %}

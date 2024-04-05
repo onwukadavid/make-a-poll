@@ -100,7 +100,7 @@ DATABASES = {
 }
 
 # custom user model
-AUTH_USER_MODEL = 'Accounts.User'
+AUTH_USER_MODEL = 'Accounts.Author'
 
 
 # Password validation
@@ -152,3 +152,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '/thumbnails/')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# move values to .env file
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 300

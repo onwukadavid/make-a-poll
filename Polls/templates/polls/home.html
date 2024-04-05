@@ -9,18 +9,40 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | Current user: {{ user}}
+    {% if user.is_authenticated %}
+        <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | <a href="{% url 'accounts:logout' %}">Logout</a> | Current user: {{ user }}
+    {% else %}
+        <a href="{% url 'polls:create-poll' %}">Create New Poll</a> | <a href="{% url 'accounts:login' %}">Login</a>
+    {% endif %}
+
+    <br>
+    <br>
+    {% if voted_polls %}
+        {% for voted_poll in voted_polls %}
+            <a href="{% url 'polls:result' voted_poll.author.username voted_poll.slug %}">{{ voted_poll.title }}</a>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <br>
+
     {% for poll in polls %}
-        <a href="{% url 'polls:view-poll' poll.user.username poll.slug %}">
+        <a href="{% url 'polls:view-poll' poll.author.username poll.slug %}">
             <div class="card" style="width: 18rem;border:solid 1px black;">
                 <img src="{% static 'Polls/img/default.jpg' %}" class="card-img-top" alt="{{ poll.title }}" style="width:100%;">
                 <div class="card-body">
                     <p class="card-text">{{ poll.title }}</p>
                     <p class="card-text">{{ poll.description }}</p>
-                    <small>{{ poll.status }} | by {{ poll.user.username }}| share</small> 
-                    {% if user == poll.user %}
+                    <small>{{ poll.status }} | by {{ poll.author.username }}| share</small> 
+                    {% if user == poll.author %}
                         <p>
                             <a href="{% url 'polls:edit-poll' user.username poll.slug %}">edit</a>
+                        </p>
+                    {% endif %}
+
+                    {{perms.Polls.delete_question}}
+                    {% if perms.Polls.delete_question %}
+                        <p>
+                            <a href="{% url 'polls:edit-poll' user.username poll.slug %}">delete</a>
                         </p>
                     {% endif %}
 
